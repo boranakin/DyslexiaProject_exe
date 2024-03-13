@@ -1,0 +1,7 @@
+﻿  Tobii_api_test1.cpp
+  tobii_gameintegration_dynamic_loader.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 484 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Tobii_api_test1.vcxproj -> C:\Users\borana\Documents\Visual Studio 2022 Projects\DyslexiaProject_exe\Tobii_api_test1\x64\Release\Tobii_api_test1.exe
