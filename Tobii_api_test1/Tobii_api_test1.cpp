@@ -44,19 +44,22 @@ void GazeSample(HWND windowHandle) {
         GazePoint gazePoint;
         if (streamsProvider->GetLatestGazePoint(gazePoint)) {
             // Get the current time as a time_point
-            system_clock::time_point now = system_clock::now();
-            // Convert to a time_t for compatibility with std::put_time
-            std::time_t now_c = system_clock::to_time_t(now);
-            // Convert to tm struct for formatting
-            std::tm now_tm;
-            localtime_s(&now_tm, &now_c);
+            auto now = std::chrono::system_clock::now();
+            auto nowAsTimeT = std::chrono::system_clock::to_time_t(now);
+            auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 
-            // Write the time and gaze point to the file
-            gazeDataFile << std::put_time(&now_tm, "[%Y-%m-%d %H:%M:%S] ")
+            // Convert to tm struct for formatting
+            std::tm nowTm;
+            localtime_s(&nowTm, &nowAsTimeT);
+
+            // Write the time up to seconds
+            gazeDataFile << std::put_time(&nowTm, "[%Y-%m-%d %H:%M:%S");
+            // Write milliseconds and gaze point to the file
+            gazeDataFile << '.' << std::setfill('0') << std::setw(3) << nowMs.count() << "] "
                 << "Gaze point: [" << gazePoint.X << ", " << gazePoint.Y << "]" << std::endl;
         }
 
-        Sleep(1000 / 60); // Approximately 60 updates per second
+        Sleep(1000 / 100); // Approximately 100 updates per second
     }
 
     api->Shutdown();
